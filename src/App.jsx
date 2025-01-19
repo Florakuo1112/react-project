@@ -1,35 +1,200 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import axios  from 'axios';
+
+// 請自行替換 API_PATHconst 
+const API_BASE = import.meta.env.VITE_BASE_URL;
+const API_PATH = import.meta.env.VITE_API_PATH;
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+  });
+  const [isAuth, setIsAuth] = useState(false); //初始值為false
+  const [products, setProducts] = useState([]); //初始值為空陣列
+  const [tempProduct, setTempProduct] = useState(null); //初始值為null
 
+
+  //function
+  function handleInput(e){
+    const {name} = e.target;
+    setFormData({
+      ...formData,
+      [name]:e.target.value
+    })
+  };
+
+  async function login(e){
+    e.preventDefault(); //要透過表單觸發submit的話，要使用e.preventDefault(),取消form表單的預設行，避免submit直接觸發
+    try {
+      const res = await axios.post(`${API_BASE}/admin/signin`, formData) //axios.post(’’,{body},{header})
+      console.log(res);
+      const {token, expired} = res.data;
+      document.cookie = `loginToken=${token}; expires=${new Date(expired)};path=/`
+      axios.defaults.headers.common['Authorization'] = token;
+      checkLogin();
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
+  async function checkLogin(){
+    try {
+      const res = await axios.post(`${API_BASE}/api/user/check`);
+      console.log(res.data);
+      setIsAuth(true);
+      await getAllProducts();
+      alert('登入成功')
+    } catch (error) {
+      console.log(error)
+    }
+  };
+  
+
+  async function getAllProducts(){
+    try {
+      const res = await axios.get(`${API_BASE}/api/${API_PATH}/admin/products`);
+      console.log(res);
+      setProducts(res.data.products);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React AAA</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      {isAuth ? (
+        <div className="container">
+          <div className="row mt-5">
+            <div className="col-md-6">
+              <button type="button" onClick={checkLogin} className="btn btn-success">檢查登入狀態</button>
+              <h2>產品列表</h2>
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>產品名稱</th>
+                    <th>原價</th>
+                    <th>售價</th>
+                    <th>是否啟用</th>
+                    <th>查看細節</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {products && products.length > 0 ? (
+                    products.map((item) => (
+                      <tr key={item.id}>
+                        <td>{item.title}</td>
+                        <td>{item.origin_price}</td>
+                        <td>{item.price}</td>
+                        <td>{item.is_enabled ? "啟用" : "未啟用"}</td>
+                        <td>
+                          <button
+                            className="btn btn-primary"
+                            onClick={() => setTempProduct(item)}
+                          >
+                            查看細節
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="5">尚無產品資料</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+            <div className="col-md-6">
+              <h2>單一產品細節</h2>
+              {tempProduct ? (
+                <div className="card mb-3">
+                  <img
+                    src={tempProduct.imageUrl}
+                    className="card-img-top primary-image"
+                    alt="主圖"
+                  />
+                  <div className="card-body">
+                    <h5 className="card-title">
+                      {tempProduct.title}
+                      <span className="badge bg-primary ms-2">
+                        {tempProduct.category}
+                      </span>
+                    </h5>
+                    <p className="card-text">
+                      商品描述：{tempProduct.category}
+                    </p>
+                    <p className="card-text">商品內容：{tempProduct.content}</p>
+                    <div className="d-flex">
+                      <p className="card-text text-secondary">
+                        <del>{tempProduct.origin_price}</del>
+                      </p>
+                      元 / {tempProduct.price} 元
+                    </div>
+                    <h5 className="mt-3">更多圖片：</h5>
+                    <div className="d-flex flex-wrap">
+                      {tempProduct.imagesUrl?.map((url, index) => (
+                        <img
+                          key={index}
+                          src={url}
+                          className="images"
+                          alt="副圖"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <p className="text-secondary">請選擇一個商品查看</p>
+              )}
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="container login">
+          {JSON.stringify(formData)}
+          <div className="row justify-content-center">
+            <h1 className="h3 mb-3 font-weight-normal">請先登入</h1>
+            <div className="col-8">
+              <form id="form" className="form-signin" onSubmit={login} >
+                <div className="form-floating mb-3">
+                <label htmlFor="username">Email address</label>
+                  <input
+                    type="email"
+                    className="form-control"
+                    id="username"
+                    placeholder="name@example.com"
+                    onChange ={handleInput}
+                    name = "username"
+                    required
+                    autoFocus
+                  />
+                </div>
+                <div className="form-floating">
+                <label htmlFor="password">Password</label>
+                  <input
+                    type="password"
+                    className="form-control"
+                    id="password"
+                    placeholder="Password"
+                    name = "password"
+                    onChange ={handleInput}
+                    required
+                  />
+                </div>
+                <button
+                  className="btn btn-lg btn-primary w-100 mt-3"
+                  type="submit">
+                  登入
+                </button>
+              </form>
+            </div>
+          </div>
+          <p className="mt-5 mb-3 text-muted">&copy; 2024~∞ - 六角學院</p>
+        </div>
+      )}
     </>
-  )
+  );
 }
+
 
 export default App
