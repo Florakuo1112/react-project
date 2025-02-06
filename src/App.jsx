@@ -499,6 +499,7 @@ ref={productModalRef}>
                 type="checkbox"
                 className="form-check-input"
                 id="isEnabled"
+                checked={tempProduct.is_enabled}
                 onChange={(e)=>{console.log(e.target.checked);handleProductModalInputChange(e);}}
               />
               <label className="form-check-label" htmlFor="isEnabled">
