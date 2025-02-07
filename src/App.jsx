@@ -18,7 +18,7 @@ const defaultTempProduct=
     description:"",
     content:"",
     is_enabled:false,
-    imagesUrl:[]
+    imagesUrl:[""]
   };
 
 function App() {
@@ -179,8 +179,14 @@ function App() {
   };
   //productModal add副圖
   function handleAddImgs(){
-    console.log(tempProduct.imagesUrl)
-    if(tempProduct.imagesUrl.length < 5 && tempProduct.imagesUrl[length-1] !== ""){
+    console.log(tempProduct.imagesUrl);
+    if(tempProduct.imagesUrl == undefined){
+      setTempProduct({
+        ...tempProduct,
+        imagesUrl:[""]
+      });
+    };
+    if(tempProduct.imagesUrl !== undefined && tempProduct.imagesUrl.length < 5 && tempProduct.imagesUrl[length-1] !== ""){
       const newImagesUrl = [...tempProduct.imagesUrl];
       newImagesUrl.push('');
       setTempProduct({
