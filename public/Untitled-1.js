@@ -1,0 +1,21 @@
+[
+    {
+        path:'/',
+        children:[
+            {
+                path:'about'
+            }
+        ]
+    },
+    {
+        path:'/admin',
+        children:[
+            {
+                path:'products'
+            }
+        ]
+    },
+    {
+        path:'/login'
+    }
+]
