@@ -17,7 +17,8 @@ const defaultTempProduct=
     price:0,
     description:"",
     content:"",
-    is_enabled:false,
+    is_enabled:0,
+    provide_delivery:0,
     imagesUrl:[""]
   };
 
@@ -55,8 +56,10 @@ function ProductsListComponent({
         console.log(res);
         await getAllProducts();
         closeProductModal();
+        alert(res.data.message)
         } catch (error) {
         console.log(error);
+        alert(error.response.data.message)
         }
     };
 
@@ -66,9 +69,11 @@ function ProductsListComponent({
         const res = await axios.delete(`${API_BASE}/api/${API_PATH}/admin/product/${id}`)
         console.log(res);
         await getAllProducts();
+        alert(res.data.message)
         closeDeletProductModal();
         } catch (error) {
         console.log(error);
+        alert(error.response.data.message)
         }
     };
   //修改產品
@@ -78,9 +83,11 @@ function ProductsListComponent({
         const res = await axios.put(`${API_BASE}/api/${API_PATH}/admin/product/${id}`,{data});
         console.log(res);
         await getAllProducts();
+        alert(res.data.message)
         closeProductModal();
         } catch (error) {
         console.log(error);
+        alert(error.response.data.message)
         }
     }
 
@@ -97,14 +104,12 @@ function ProductsListComponent({
     };
     //開啟關閉編輯產品資料productModal
     function closeProductModal(){
-      document.querySelector('#isEnabled').checked= false;
       myProductModalRef.current.hide();
     };
 
   //productModal input
     function handleProductModalInputChange(e){
         const {value, name, checked, type} = e.target;
-        console.log(value, name, checked,type);
     //   let editObj = {
     //     [name]:type === "number" ? Number(value): value,
     //     [name]:type === "checkbox" ? checked: value,
@@ -115,7 +120,7 @@ function ProductsListComponent({
         editObj[name] = Number(value);
     }
     else if(type === "checkbox"){
-        editObj[name] = checked;
+        editObj[name] = checked==true? 1:0 ;
     }
     else if(type === "file"){
         editObj['imageUrl'] = imageUrlRef.current;
@@ -149,7 +154,7 @@ function ProductsListComponent({
     } catch (error) {
       console.log(error);
       alert('上傳失敗:',
-      error.response.data.message.message,
+      error.response?.data.message.message,
       error.message
       )
     }
@@ -211,11 +216,6 @@ function ProductsListComponent({
     function closeDeletProductModal(){
         myDelProductModalRef.current.hide();
     };
-    //pagination
-    function handlePagination(page){
-        console.log('handlePagination trigged', page)
-        getAllProducts(page);
-    }
     
     return(
         <div className="container">
@@ -261,7 +261,7 @@ function ProductsListComponent({
                 </tbody>
               </table>
               <div className='d-flex justify-content-center'>
-              <PaginationComponent pageRef={pageRef} handlePagination={handlePagination}/>
+              <PaginationComponent pageRef={pageRef}/>
               </div>
             </div>
           </div>

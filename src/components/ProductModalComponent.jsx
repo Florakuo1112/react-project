@@ -17,7 +17,7 @@ function ProductModalComponent({
 ref={productModalRef}>
   <div className="modal-dialog modal-dialog-centered modal-xl">
     <div className="modal-content border-0 shadow">
-    {JSON.stringify(tempProduct)}
+    {/* {JSON.stringify(tempProduct)} */}
       <div className="modal-header border-bottom">
 
         <h5 className="modal-title fs-4">{productModalStatus.current === 'create'  ? "新增產品":"編輯產品"}</h5>
@@ -65,8 +65,7 @@ ref={productModalRef}>
                     htmlFor={`imagesUrl-${index + 1}`}
                     className="form-label"
                   >
-                    副圖 {index + 1}<br/>
-                    {`imgurl${image}`}
+                    副圖 {index + 1}
                   </label>
                   <div className="input-group mb-3">
                 <input type="file" 
@@ -96,7 +95,8 @@ ref={productModalRef}>
                   <button type="button" className="btn btn-warning" onClick={()=>{handleRemoveImgs(index)}} >移除圖片</button>
                 </div>
               ))}
-              <button type="button" className="btn btn-success" onClick={()=>handleAddImgs()} >新增圖片</button>
+              <button type="button" className={`btn btn-success d-flex d-${tempProduct.imagesUrl?.length == 5 && 'none'}`}
+              onClick={()=>handleAddImgs()} >新增圖片</button>
             </div>
             
             
@@ -105,7 +105,7 @@ ref={productModalRef}>
           <div className="col-md-8">
             <div className="mb-3">
               <label htmlFor="title" className="form-label">
-                標題{tempProduct.title}
+                標題
               </label>
               <input
                 name="title"
@@ -120,7 +120,7 @@ ref={productModalRef}>
 
             <div className="mb-3">
               <label htmlFor="category" className="form-label">
-                分類{tempProduct.category}
+                分類
               </label>
               <input
                 name="category"
@@ -135,7 +135,7 @@ ref={productModalRef}>
 
             <div className="mb-3">
               <label htmlFor="unit" className="form-label">
-                單位{tempProduct.unit}
+                單位
               </label>
               <input
                 name="unit"
@@ -161,11 +161,12 @@ ref={productModalRef}>
                   placeholder="請輸入原價"
                   value={tempProduct.origin_price}
                   onChange={handleProductModalInputChange}
+                  min="0"
                 />
               </div>
               <div className="col-6">
                 <label htmlFor="price" className="form-label">
-                  售價{tempProduct.price}
+                  售價
                 </label>
                 <input
                   name="price"
@@ -175,13 +176,14 @@ ref={productModalRef}>
                   placeholder="請輸入售價"
                   value={tempProduct.price}
                   onChange={handleProductModalInputChange}
+                  min="0"
                 />
               </div>
             </div>
 
             <div className="mb-3">
               <label htmlFor="description" className="form-label">
-                產品描述{tempProduct.description}
+                產品描述
               </label>
               <textarea
                 name="description"
@@ -196,7 +198,7 @@ ref={productModalRef}>
 
             <div className="mb-3">
               <label htmlFor="content" className="form-label">
-                說明內容{tempProduct.content}
+                說明內容
               </label>
               <textarea
                 name="content"
@@ -218,7 +220,20 @@ ref={productModalRef}>
                 onChange={(e)=>{console.log(e.target.checked);handleProductModalInputChange(e);}}
               />
               <label className="form-check-label" htmlFor="isEnabled">
-                是否啟用 {tempProduct.is_enabled}
+                是否啟用 
+              </label>
+            </div>
+
+            <div className="form-check">
+              <input name="provide_delivery"
+                type="checkbox"
+                className="form-check-input"
+                id="provideDelivery"
+                checked={tempProduct.provide_delivery}
+                onChange={(e)=>{console.log(e.target.checked);handleProductModalInputChange(e);}}
+              />
+              <label className="form-check-label" htmlFor="provideDelivery">
+                可供接送 
               </label>
             </div>
           </div>

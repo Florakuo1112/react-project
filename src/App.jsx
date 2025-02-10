@@ -11,10 +11,9 @@ const API_PATH = import.meta.env.VITE_API_PATH;
 function App() {
   //useState area
   const [products, setProducts] = useState([]); //初始值為空陣列
-
+  const [isAuth, setIsAuth] = useState(false);
   //useRef area
-  const isAuthRef = useRef(false);
-  const pageRef = useRef(null); //放pagination info
+  const pageRef = useRef({}); //放pagination info
 
   //useEffect area
   //for init
@@ -34,12 +33,12 @@ function App() {
     try {
       const res = await axios.post(`${API_BASE}/api/user/check`);
       console.log(res.data);
-      isAuthRef.current = true;
+      setIsAuth(true);
       await getAllProducts();
     } catch (error) {
-      isAuthRef.current = false;
+      setIsAuth(false);
       console.log(error);
-      alert(error.response.data.message)
+      alert('登入失敗', error.response.data.message)
     }
   };
   
@@ -57,7 +56,7 @@ function App() {
 
   return (
     <>
-      {isAuthRef.current ? (
+      {isAuth ? (
         <ProductsListComponent
         API_BASE={API_BASE}
         API_PATH={API_PATH}

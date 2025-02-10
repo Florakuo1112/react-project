@@ -25,12 +25,12 @@ function LoginPageComponent({checkLogin, API_BASE, API_PATH}){
         axios.defaults.headers.common['Authorization'] = token;
         checkLogin();
         } catch (error) {
-        console.log(error)
+        console.log(error);
+        alert('登入失敗')
         }
     };
     return(
         <div className="container login">
-          {JSON.stringify(formData)}
           <div className="row justify-content-center">
             <h1 className="h3 mb-3 font-weight-normal">請先登入</h1>
             <div className="col-8">
