@@ -1,11 +1,41 @@
-import {  useState } from 'react';
+import {  useState, useEffect } from 'react';
+import { useNavigate } from 'react-router';
 import axios  from 'axios';
-function LoginPageComponent({checkLogin, API_BASE, API_PATH}){
+
+// 請自行替換 API_PATHconst 
+const API_BASE = import.meta.env.VITE_BASE_URL;
+const API_PATH = import.meta.env.VITE_API_PATH;
+
+function LoginView(){
     const [formData, setFormData] = useState({
         username: "",
         password: "",
       }); 
+      const navigate = useNavigate();
+    
+    //useEffect area
+    //for init
+    useEffect(()=>{
+      const token = document.cookie.replace(
+        /(?:(?:^|.*;\s*)loginToken\s*\=\s*([^;]*).*$)|^.*$/,
+        "$1",
+      ); //找到cookie裡的loginToken後的第一個
+      axios.defaults.headers.common['Authorization'] = token;
+      checkLogin();
+  },[]);
+  
     //Function
+    async function checkLogin(){
+      try {
+        const res = await axios.post(`${API_BASE}/api/user/check`);
+        console.log('確認登入', res.data);
+        navigate('/Admin/Products')
+      } catch (error) {
+        console.log('確認登入失敗', error);
+        alert('登入失敗', error.response.data.message);
+        navigate('/Login')
+      }
+    };
     //input登入帳號密碼
     function handleInput(e){
         const {name} = e.target;
@@ -23,20 +53,19 @@ function LoginPageComponent({checkLogin, API_BASE, API_PATH}){
         const {token, expired} = res.data;
         document.cookie = `loginToken=${token}; expires=${new Date(expired)};path=/`
         axios.defaults.headers.common['Authorization'] = token;
-        checkLogin();
+        navigate('/Admin/Products')
         } catch (error) {
         console.log(error);
         alert('登入失敗')
         }
     };
     return(
-        <div className="container login">
+        <div className="login">
           <div className="row justify-content-center">
-            <h1 className="h3 mb-3 font-weight-normal">請先登入</h1>
             <div className="col-8">
+            <h1 className="h3 mb-3 font-weight-normal ">請先登入</h1>
               <form id="form" className="form-signin" onSubmit={login} >
-                <div className="form-floating mb-3">
-                <label htmlFor="username">Email address</label>
+                <div className="form-floating mb-3">                
                   <input
                     type="email"
                     className="form-control"
@@ -45,11 +74,10 @@ function LoginPageComponent({checkLogin, API_BASE, API_PATH}){
                     onChange ={handleInput}
                     name = "username"
                     required
-                    autoFocus
-                  />
+                    autoFocus/>
+                  <label htmlFor="username">Email address</label>
                 </div>
                 <div className="form-floating">
-                <label htmlFor="password">Password</label>
                   <input
                     type="password"
                     className="form-control"
@@ -59,6 +87,7 @@ function LoginPageComponent({checkLogin, API_BASE, API_PATH}){
                     onChange ={handleInput}
                     required
                   />
+                  <label htmlFor="password">Password</label>
                 </div>
                 <button
                   className="btn btn-lg btn-primary w-100 mt-3"
@@ -73,4 +102,4 @@ function LoginPageComponent({checkLogin, API_BASE, API_PATH}){
     )
 };
 
-export default LoginPageComponent;
+export default LoginView;

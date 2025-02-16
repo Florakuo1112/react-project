@@ -1,11 +1,14 @@
-import { useRef, useState } from 'react'
+import { useRef, useState,useEffect } from 'react'
 import axios  from 'axios';
-import { useEffect } from 'react';
 import { Modal } from 'bootstrap';
  
-import PaginationComponent from '../components/PaginationComponent';
-import DeleteModalComponent from '../components/DeleteModalComponent';
-import ProductModalComponent from '../components/ProductModalComponent';
+import PaginationComponent from '../../components/PaginationComponent';
+import DeleteModalComponent from '../../components/DeleteModalComponent';
+import ProductModalComponent from '../../components/ProductModalComponent';
+
+// 請自行替換 API_PATHconst 
+const API_BASE = import.meta.env.VITE_BASE_URL;
+const API_PATH = import.meta.env.VITE_API_PATH;
 
 const defaultTempProduct=
 {
@@ -22,15 +25,10 @@ const defaultTempProduct=
     imagesUrl:[""]
   };
 
-function ProductsListComponent({
-    API_BASE, 
-    API_PATH,
-    products,
-    pageRef,
-    getAllProducts
-
-}){
+function AdminProductsView(){
     //useState area
+    const [products, setProducts] = useState([]); //初始值為空陣列
+    const [pages, setPages] = useState({}); //放pagination info
     const [tempProduct, setTempProduct] = useState(defaultTempProduct); //productModal初始值
     //useRef area
     const productModalRef = useRef(null);
@@ -41,14 +39,34 @@ function ProductsListComponent({
     const imageUrlRef = useRef(null);//放回傳的file url
     const imageUrlStatus = useRef(null);//判斷是主圖還是副圖
 
+    //useEffect
+    useEffect(()=>{
+        const token = document.cookie.replace(
+            /(?:(?:^|.*;\s*)loginToken\s*\=\s*([^;]*).*$)|^.*$/,
+            "$1",
+          ); //找到cookie裡的loginToken後的第一個
+          axios.defaults.headers.common['Authorization'] = token;
+          getAllProducts();
+    },[])
     //建立modal實例
     useEffect(()=>{
-    myProductModalRef.current = new Modal(productModalRef.current,{backdrop:false});
-    myDelProductModalRef.current = new Modal(delProductModalRef.current,{backdrop:false});
+        myProductModalRef.current = new Modal(productModalRef.current,{backdrop:false});
+        myDelProductModalRef.current = new Modal(delProductModalRef.current,{backdrop:false});
     },[])
+  //funciton
+  //取得所有產品資料
+    async function getAllProducts(page=1){
+        try {
+            const res = await axios.get(`${API_BASE}/api/${API_PATH}/admin/products?page=${page}`);
+            console.log('產品資料', res);
+            setProducts(res.data.products);
+            setPages(res.data.pagination);
+        } catch (error) {
+            console.log('產品資料取得錯誤',error);
+        }
+        };
 
-    //Function
-    //建立新的產品
+   //建立新的產品
     async function createProduct(){
         try {
         const data = tempProduct;
@@ -147,7 +165,7 @@ function ProductsListComponent({
       console.log(res.data.imageUrl);
       imageUrlRef.current = res.data.imageUrl;
       if(imageUrlStatus.current == "main"){
-        handleProductModalInputChange(e);
+        handleProductModalInputChange(e);       
       }else{
         handleInputImgUrls(e,index, true);
       };   
@@ -157,6 +175,8 @@ function ProductsListComponent({
       error.response?.data.message.message,
       error.message
       )
+    } finally{
+      e.target.value = '';
     }
   };
   //productModal 副圖input事件
@@ -216,10 +236,10 @@ function ProductsListComponent({
     function closeDeletProductModal(){
         myDelProductModalRef.current.hide();
     };
-    
+
     return(
-        <div className="container">
-          <div className="row mt-5">
+        <>
+        <div className="row mt-5">
             <div className="col-md-12">
               <div className="d-flex justify-content-between">
               <h2>產品列表</h2>
@@ -261,7 +281,7 @@ function ProductsListComponent({
                 </tbody>
               </table>
               <div className='d-flex justify-content-center'>
-              <PaginationComponent pageRef={pageRef}/>
+              <PaginationComponent pages={pages} setPages={setPages} getAllProducts={getAllProducts}/>
               </div>
             </div>
           </div>
@@ -290,9 +310,9 @@ function ProductsListComponent({
         tempProduct={tempProduct} 
         deleteProduct={deleteProduct}
         />
-
-        </div>
+        
+        </>
     )
 };
 
-export default ProductsListComponent;
+export default AdminProductsView;
