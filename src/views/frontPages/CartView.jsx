@@ -68,11 +68,15 @@ function CartView(){
     //3.寫onSubmit(data) 4.綁定input{...register('')} 與設定驗證 5.用form onSubmit={handleSubmit(onSubmit)} 確認是否有取正確
     //6.在useForm取出formState:{errors}
 
-    
-
     useEffect(()=>{
         getCartItems();
-}, []);
+    }, []);
+
+    useEffect(()=>{
+        if(!loading){
+            document.body.style.overflow = 'auto' ;
+        }
+    },[loading]);
 
 
 async function getCartItems(){
