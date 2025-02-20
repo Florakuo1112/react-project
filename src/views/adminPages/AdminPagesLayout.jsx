@@ -8,7 +8,6 @@ const API_BASE = import.meta.env.VITE_BASE_URL;
 const API_PATH = import.meta.env.VITE_API_PATH;
 
 function AdminPagesLayout(){
-    const [isAuth, setIsAuth] = useState(false);
     const navigate = useNavigate();
 
     //useEffect area
@@ -29,12 +28,10 @@ function AdminPagesLayout(){
       try {
         const res = await axios.post(`${API_BASE}/api/user/check`);
         console.log('確認登入', res.data);
-        setIsAuth(true);
       } catch (error) {
-        setIsAuth(false);
         console.log('確認登入失敗', error);
         alert('登入失敗', error.response.data.message);
-        navigate('/Login')
+        navigate('/login')
       }
     };
     return(

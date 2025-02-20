@@ -42,6 +42,7 @@ function CartView(){
     const [loading, setLoading] = useState(false);
     const [cartItems, setCartItems] = useState([]);
     const [cartInfo, setCartInfo] = useState({});
+    const navigate = useNavigate();
 
     const {
         register,
@@ -67,7 +68,7 @@ function CartView(){
     //3.寫onSubmit(data) 4.綁定input{...register('')} 與設定驗證 5.用form onSubmit={handleSubmit(onSubmit)} 確認是否有取正確
     //6.在useForm取出formState:{errors}
 
-    const navigate = useNavigate();
+    
 
     useEffect(()=>{
         getCartItems();
@@ -118,14 +119,14 @@ async function deleteSingleCartItem(id){
     };
 };
 
-async function reviseCartItemQty(id, qty){
+async function reviseCartItemQty(cartId, productId, qty){
     setLoading(true);
     try {
         const data = {
-            "product_id" : id,
+            "product_id" : productId,
             "qty" : qty
         };
-        const res = await axios.put(`${API_BASE}/api/${API_PATH}/cart/${id}`,{data});
+        const res = await axios.put(`${API_BASE}/api/${API_PATH}/cart/${cartId}`,{data});
         console.log('reviseCartItemQty',res);           
     } catch (error) {
         console.log('reviseCartItemQty error', error);
@@ -167,7 +168,8 @@ async function submitOrder(userInfo){
             loading &&<LoadingComponent type={'spin'} color={"#FF8C00"}/>
         }
         <div className="text-end">
-            <button className="btn btn-outline-danger" type="button" onClick={()=>deleteCarts()}>清空購物車</button>
+            <button className="btn btn-outline-danger" type="button" disabled={cartItems.length == 0 || loading}
+            onClick={()=>deleteCarts()}>清空購物車</button>
         </div>
         <div>
           <table className="table align-middle">
@@ -192,7 +194,7 @@ async function submitOrder(userInfo){
                               <th>{item.product.price}</th>
                               <th>{item.product.unit}</th>
                               <th>
-                                  <input type='number' value={item.qty}  className="form-control w-50" min="1"  disabled={loading} onChange={(e)=>{reviseCartItemQty(item.id, Number(e.target.value))}}/>
+                                  <input type='number' value={item.qty}  className="form-control w-50" min="1"  disabled={loading} onChange={(e)=>{reviseCartItemQty(item.id,item.product_id, Number(e.target.value))}}/>
                               </th>
                          </tr>
                       )
@@ -231,15 +233,15 @@ async function submitOrder(userInfo){
             <InputComponent id={"tel"} errors={errors} title={"收件者電話"} placeholder={"請輸入電話"}  register={register} type={'tel'}
             validateRule={{
                 required:"必填", 
-                minLength:{
-                value:8, 
-                message:"電話需超過 8 碼"
+                pattern:{
+                    value: /^\d{8}$/,
+                message:"電話需超過8碼數字"
                 }
             }}
             />
             <InputComponent id={"address"} errors={errors} title={"收件者地址"} placeholder={"請輸入地址"}  register={register} type={'text'} validateRule={{required:"必填"}}/>
             <TextAreaComponent id={"message"} title={"留言"} register={register}/>
-            <button className='btn btn-outline-primary' disabled={loading}>submit</button>
+            <button className='btn btn-outline-primary' disabled={cartItems.length == 0 || loading}>submit</button>
             </form>
         </div>
         </>

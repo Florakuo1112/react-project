@@ -1,6 +1,7 @@
 import {  useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import axios  from 'axios';
+import LoadingComponent from '../../components/LoadingComponent';
 
 // 請自行替換 API_PATHconst 
 const API_BASE = import.meta.env.VITE_BASE_URL;
@@ -11,6 +12,7 @@ function LoginView(){
         username: "",
         password: "",
       }); 
+      const [loading, setLoading] = useState(false);
       const navigate = useNavigate();
     
     //useEffect area
@@ -26,14 +28,18 @@ function LoginView(){
   
     //Function
     async function checkLogin(){
+      setLoading(true);
       try {
         const res = await axios.post(`${API_BASE}/api/user/check`);
         console.log('確認登入', res.data);
-        navigate('/Admin/Products')
+        navigate('/admin/products')
       } catch (error) {
         console.log('確認登入失敗', error);
         alert('登入失敗', error.response.data.message);
-        navigate('/Login')
+        navigate('/login')
+      }
+      finally{
+        setLoading(false);
       }
     };
     //input登入帳號密碼
@@ -46,6 +52,7 @@ function LoginView(){
     };
     //登入
     async function login(e){
+        setLoading(true);
         e.preventDefault(); //要透過表單觸發submit的話，要使用e.preventDefault(),取消form表單的預設行，避免submit直接觸發
         try {
         const res = await axios.post(`${API_BASE}/admin/signin`, formData) //axios.post(’’,{body},{header})
@@ -53,13 +60,18 @@ function LoginView(){
         const {token, expired} = res.data;
         document.cookie = `loginToken=${token}; expires=${new Date(expired)};path=/`
         axios.defaults.headers.common['Authorization'] = token;
-        navigate('/Admin/Products')
+        navigate('/admin/products')
         } catch (error) {
         console.log(error);
         alert('登入失敗')
+        }finally{
+          setLoading(false);
         }
     };
-    return(
+    return(<>
+    {
+      loading &&<LoadingComponent type={'spin'} color={"#FF8C00"}/>
+    }
         <div className="login">
           <div className="row justify-content-center">
             <div className="col-8">
@@ -99,6 +111,7 @@ function LoginView(){
           </div>
           <p className="mt-5 mb-3 text-muted">&copy; 2024~∞ - 六角學院</p>
         </div>
+        </>
     )
 };
 

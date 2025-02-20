@@ -7,15 +7,16 @@ import LoginView from "../views/frontPages/LoginView";
 import CartView from "../views/frontPages/CartView";
 import ProductsListView from "../views/frontPages/ProductsListView";
 import ProductView from "../views/frontPages/ProductView";
+import NotFoundView from "../views/frontPages/NotFoundView"
 
 
 const routes = [
     {
-        path : '/Admin',
+        path : '/admin',
         element : <AdminPagesLayout/>,
         children:[
             {
-                path : 'Products',
+                path : 'products',
                 element : <AdminProductsView/>
             }
         ]
@@ -25,7 +26,7 @@ const routes = [
         element : <FrontPagesLayout/>,
         children:[
             {
-                path : 'Login',
+                path : 'login',
                 element : <LoginView/>
             },
             {
@@ -33,16 +34,20 @@ const routes = [
                 element : <HomeView/>
             },
             {
-                path : 'Cart',
+                path : 'cart',
                 element : <CartView/>
             },
             {
-                path : 'ProductList',
+                path : 'productlist',
                 element : <ProductsListView/>
             },
             {
-                path : ':ProductList/:id',
+                path : ':productlist/:id',
                 element: <ProductView />
+            },
+            {
+                path : '*',
+                element: <NotFoundView />
             }
         ]
     }

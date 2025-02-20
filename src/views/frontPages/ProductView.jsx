@@ -72,7 +72,7 @@ function ProductView(){
                             <label htmlFor="qty" className='text-center'>{`${product.unit}`}</label>
                         </form>
                         <button type="button" className="btn btn-warning" disabled={loading} 
-                        onClick={()=>{addToCart(product.id, addedProduct.qty); navigate('/ProductList')}}>
+                        onClick={()=>{addToCart(product.id, addedProduct.qty); navigate('/productlist')}}>
                             加入購物車
                         </button>
                     </div>
