@@ -5,8 +5,11 @@ import { Modal } from 'bootstrap';
 import PaginationComponent from '../../components/PaginationComponent';
 import DeleteModalComponent from '../../components/DeleteModalComponent';
 import ProductModalComponent from '../../components/ProductModalComponent';
+import LoadingComponent from '../../components/LoadingComponent';
+import { useDispatch, useSelector } from 'react-redux';
+import { pushMessage } from '../../slice/adminProductStatusMessageSlice';
 
-// 請自行替換 API_PATHconst 
+// API_PATH
 const API_BASE = import.meta.env.VITE_BASE_URL;
 const API_PATH = import.meta.env.VITE_API_PATH;
 
@@ -30,6 +33,7 @@ function AdminProductsView(){
     const [products, setProducts] = useState([]); //初始值為空陣列
     const [pages, setPages] = useState({}); //放pagination info
     const [tempProduct, setTempProduct] = useState(defaultTempProduct); //productModal初始值
+    const [loading, setLoading] = useState(false);
     //useRef area
     const productModalRef = useRef(null);
     const myProductModalRef = useRef(null);
@@ -38,24 +42,27 @@ function AdminProductsView(){
     const productModalStatus = useRef(null);//判斷是新增還是編輯
     const imageUrlRef = useRef(null);//放回傳的file url
     const imageUrlStatus = useRef(null);//判斷是主圖還是副圖
-
+    //其他
+    const dispatch = useDispatch();
     //useEffect
     useEffect(()=>{
-        const token = document.cookie.replace(
-            /(?:(?:^|.*;\s*)loginToken\s*\=\s*([^;]*).*$)|^.*$/,
-            "$1",
-          ); //找到cookie裡的loginToken後的第一個
-          axios.defaults.headers.common['Authorization'] = token;
-          getAllProducts();
-    },[])
+      const token = document.cookie.replace(
+          /(?:(?:^|.*;\s*)loginToken\s*\=\s*([^;]*).*$)|^.*$/,
+          "$1",
+        ); //找到cookie裡的loginToken後的第一個
+      axios.defaults.headers.common['Authorization'] = token;
+      getAllProducts();
+    },[]);
     //建立modal實例
     useEffect(()=>{
         myProductModalRef.current = new Modal(productModalRef.current,{backdrop:false});
         myDelProductModalRef.current = new Modal(delProductModalRef.current,{backdrop:false});
-    },[])
+    },[]);
+
   //funciton
   //取得所有產品資料
     async function getAllProducts(page=1){
+      setLoading(true);
         try {
             const res = await axios.get(`${API_BASE}/api/${API_PATH}/admin/products?page=${page}`);
             console.log('產品資料', res);
@@ -63,49 +70,73 @@ function AdminProductsView(){
             setPages(res.data.pagination);
         } catch (error) {
             console.log('產品資料取得錯誤',error);
+        }finally{
+          setLoading(false);
         }
         };
 
    //建立新的產品
     async function createProduct(){
+      setLoading(true);
         try {
         const data = tempProduct;
         const res = await axios.post(`${API_BASE}/api/${API_PATH}/admin/product`,{data});
-        console.log(res);
+        dispatch(pushMessage({
+          text:res.data?.message,
+          success:res.data.success
+        }))
         await getAllProducts();
         closeProductModal();
-        alert(res.data.message)
         } catch (error) {
-        console.log(error);
-        alert(error.response.data.message)
+        dispatch(pushMessage({
+          text:error.response?.data.message.join("、"),
+          success:error.response?.data.success,
+        }))
+        }finally{
+          setLoading(false);
         }
     };
 
   //刪除產品
     async function deleteProduct(id){
+      setLoading(true);
         try {
         const res = await axios.delete(`${API_BASE}/api/${API_PATH}/admin/product/${id}`)
         console.log(res);
+        dispatch(pushMessage({
+          text:res.data?.message,
+          success:res.data.success
+        }));
         await getAllProducts();
-        alert(res.data.message)
         closeDeletProductModal();
         } catch (error) {
-        console.log(error);
-        alert(error.response.data.message)
+          dispatch(pushMessage({
+            text:error.response?.data.message.join("、"),
+            success:error.response?.data.success,
+          }));
+        }finally{
+          setLoading(false);
         }
     };
   //修改產品
     async function editProduct(id){
+      setLoading(true);
         try {
         const data = tempProduct;
         const res = await axios.put(`${API_BASE}/api/${API_PATH}/admin/product/${id}`,{data});
-        console.log(res);
+        dispatch(pushMessage({
+          text:res.data?.message,
+          success:res.data.success
+        }));
         await getAllProducts();
-        alert(res.data.message)
         closeProductModal();
         } catch (error) {
-        console.log(error);
-        alert(error.response.data.message)
+          dispatch(pushMessage({
+            text:error.response?.data.message.join("、"),
+            success:error.response?.data.success,
+          }));
+        }finally{
+          setLoading(false);
         }
     }
 
@@ -239,6 +270,7 @@ function AdminProductsView(){
 
     return(
         <>
+        {loading &&<LoadingComponent type={'spin'} color={"#FF8C00"}/>}
         <div className="row mt-5">
             <div className="col-md-12">
               <div className="d-flex justify-content-between">
@@ -310,7 +342,6 @@ function AdminProductsView(){
         tempProduct={tempProduct} 
         deleteProduct={deleteProduct}
         />
-        
         </>
     )
 };

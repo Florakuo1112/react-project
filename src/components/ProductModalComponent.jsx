@@ -13,7 +13,7 @@ function ProductModalComponent({
     imageUrlStatus
 }){
     return(
-<div id="productModal" className="modal" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+<div id="productModal" className="modal" style={{ backgroundColor: "rgba(0,0,0,0.5)" , zIndex:999}}
 ref={productModalRef}>
   <div className="modal-dialog modal-dialog-centered modal-xl">
     <div className="modal-content border-0 shadow">

@@ -1,47 +1,44 @@
-import {  useState, useEffect } from 'react';
+import {  useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router';
-import axios  from 'axios';
 import LoadingComponent from '../../components/LoadingComponent';
-
-// 請自行替換 API_PATHconst 
-const API_BASE = import.meta.env.VITE_BASE_URL;
-const API_PATH = import.meta.env.VITE_API_PATH;
+import LoginToastComponent from '../../components/LoginToastComponent'
+import { Toast } from 'bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchLoginStatus, loginAction} from '../../slice/loginStatusSlice';
 
 function LoginView(){
+    //useState
     const [formData, setFormData] = useState({
         username: "",
         password: "",
       }); 
-      const [loading, setLoading] = useState(false);
-      const navigate = useNavigate();
-    
+    const [loading, setLoading] = useState(false);
+    //useRef
+    const loginToastRef = useRef(null);
+    const myLoginToastRef = useRef(null);
+    //其他方法
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const loginStatus =  useSelector((state) => state.loginStatus.isLogin)
     //useEffect area
-    //for init
-    useEffect(()=>{
-      const token = document.cookie.replace(
-        /(?:(?:^|.*;\s*)loginToken\s*\=\s*([^;]*).*$)|^.*$/,
-        "$1",
-      ); //找到cookie裡的loginToken後的第一個
-      axios.defaults.headers.common['Authorization'] = token;
-      checkLogin();
-  },[]);
-  
-    //Function
-    async function checkLogin(){
+    //for init 確認登入狀態
+    useEffect(() => {
       setLoading(true);
-      try {
-        const res = await axios.post(`${API_BASE}/api/user/check`);
-        console.log('確認登入', res.data);
-        navigate('/admin/products')
-      } catch (error) {
-        console.log('確認登入失敗', error);
-        alert('登入失敗', error.response.data.message);
-        navigate('/login')
-      }
-      finally{
+      myLoginToastRef.current = Toast.getOrCreateInstance(loginToastRef.current);
+      dispatch(fetchLoginStatus()).finally(()=>{
+        showLoginToast();
         setLoading(false);
+        loginStatus == true && navigate('/admin/products')
+      });
+    }, [loginStatus]);
+    
+    useEffect(()=>{
+      if(!loading){
+          document.body.style.overflow = 'auto' ;
       }
-    };
+    },[loading]);
+
+    //Function
     //input登入帳號密碼
     function handleInput(e){
         const {name} = e.target;
@@ -53,21 +50,22 @@ function LoginView(){
     //登入
     async function login(e){
         setLoading(true);
-        e.preventDefault(); //要透過表單觸發submit的話，要使用e.preventDefault(),取消form表單的預設行，避免submit直接觸發
-        try {
-        const res = await axios.post(`${API_BASE}/admin/signin`, formData) //axios.post(’’,{body},{header})
-        console.log(res.data.message);
-        const {token, expired} = res.data;
-        document.cookie = `loginToken=${token}; expires=${new Date(expired)};path=/`
-        axios.defaults.headers.common['Authorization'] = token;
-        navigate('/admin/products')
-        } catch (error) {
-        console.log(error);
-        alert('登入失敗')
-        }finally{
+        e.preventDefault(); 
+        //要透過表單觸發submit的話，要使用e.preventDefault(),取消form表單的預設行，避免submit直接觸發
+        dispatch(loginAction(formData)).finally(()=>{
           setLoading(false);
-        }
+          loginStatus == true && navigate('/admin/products')
+        })
     };
+
+    function showLoginToast(){
+      myLoginToastRef.current.show();
+  };
+  
+    function closeLoginToast(){
+        myLoginToastRef.current.hide();
+    };
+
     return(<>
     {
       loading &&<LoadingComponent type={'spin'} color={"#FF8C00"}/>
@@ -109,8 +107,11 @@ function LoginView(){
               </form>
             </div>
           </div>
-          <p className="mt-5 mb-3 text-muted">&copy; 2024~∞ - 六角學院</p>
         </div>
+
+        <LoginToastComponent loginToastRef={loginToastRef} loginStatus={loginStatus}
+       closeLoginToast={closeLoginToast}></LoginToastComponent>
+
         </>
     )
 };

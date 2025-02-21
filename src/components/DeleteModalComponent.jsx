@@ -1,6 +1,6 @@
 function DeleteModalComponent({delProductModalRef, closeDeletProductModal, tempProduct, deleteProduct}){
     return(
-        <div className="modal" tabIndex="-1" ref={delProductModalRef} style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
+        <div className="modal" tabIndex="-1" ref={delProductModalRef} style={{ backgroundColor: "rgba(0,0,0,0.5)", zIndex:999 }}>
   <div className="modal-dialog">
     <div className="modal-content">
       <div className="modal-header">

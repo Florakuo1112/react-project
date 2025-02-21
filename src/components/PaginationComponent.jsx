@@ -1,5 +1,4 @@
 function PaginationComponent({pages, getAllProducts}){
-  console.log(pages)
       //pagination
       function handlePagination(e,page){
         e.preventDefault();
