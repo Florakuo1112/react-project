@@ -1,9 +1,9 @@
-function PaginationComponent({pages, getAllProducts}){
+function PaginationComponent({pages, getAllProducts, category}){
       //pagination
-      function handlePagination(e,page){
+      function handlePagination(e,page, category){
         e.preventDefault();
         console.log('handlePagination trigged', page)
-        getAllProducts(page);
+        getAllProducts(page,category);
     }
     return(
         <nav>
@@ -12,11 +12,10 @@ function PaginationComponent({pages, getAllProducts}){
           href="#" onClick={(e)=>{ handlePagination(e, pages.current_page-1)}}>
             Previous</a></li>
           {
-            //卡斯柏上課教的方法
             [...Array(pages.total_pages).keys()].map((item)=>{
               return(
                 <li className="page-item" key={item+1}><a className={`page-link ${pages.current_page == item+1 && 'active'}`} 
-                onClick={(e)=>{handlePagination(e, item+1)}}
+                onClick={(e)=>{handlePagination(e, item+1, category)}}
                  href="#">{item+1}</a></li>
               )
             })

@@ -9,8 +9,8 @@ import { fetchLoginStatus, loginAction} from '../../slice/loginStatusSlice';
 function LoginView(){
     //useState
     const [formData, setFormData] = useState({
-        username: "",
-        password: "",
+        username: "tingyu1112@gmail.com",
+        password: "FloraProject",
       }); 
     const [loading, setLoading] = useState(false);
     //useRef
@@ -19,7 +19,8 @@ function LoginView(){
     //其他方法
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const loginStatus =  useSelector((state) => state.loginStatus.isLogin)
+    const loginStatus =  useSelector((state) => state.loginStatus.isLogin);
+    
     //useEffect area
     //for init 確認登入狀態
     useEffect(() => {
@@ -30,6 +31,7 @@ function LoginView(){
         setLoading(false);
         loginStatus == true && navigate('/admin/products')
       });
+      
     }, [loginStatus]);
     
     useEffect(()=>{
@@ -67,13 +69,14 @@ function LoginView(){
     };
 
     return(<>
+    <div className='container'>
     {
       loading &&<LoadingComponent type={'spin'} color={"#FF8C00"}/>
     }
-        <div className="login">
+        <div className="login ">
           <div className="row justify-content-center">
-            <div className="col-8">
-            <h1 className="h3 mb-3 font-weight-normal ">請先登入</h1>
+            <div className="col-md-8 col-12">
+            <h1 className="h3 mb-3 font-weight-normal pt-5">請先登入</h1>
               <form id="form" className="form-signin" onSubmit={login} >
                 <div className="form-floating mb-3">                
                   <input
@@ -81,6 +84,7 @@ function LoginView(){
                     className="form-control"
                     id="username"
                     placeholder="name@example.com"
+                    value={formData.username}
                     onChange ={handleInput}
                     name = "username"
                     required
@@ -92,6 +96,7 @@ function LoginView(){
                     type="password"
                     className="form-control"
                     id="password"
+                    value={formData.password}
                     placeholder="Password"
                     name = "password"
                     onChange ={handleInput}
@@ -100,7 +105,7 @@ function LoginView(){
                   <label htmlFor="password">Password</label>
                 </div>
                 <button
-                  className="btn btn-lg btn-primary w-100 mt-3"
+                  className="btn btn-lg w-100 mt-3" style={{backgroundColor:'#997354', color:'ivory'}}
                   type="submit">
                   登入
                 </button>
@@ -112,6 +117,8 @@ function LoginView(){
         <LoginToastComponent loginToastRef={loginToastRef} loginStatus={loginStatus}
        closeLoginToast={closeLoginToast}></LoginToastComponent>
 
+    </div>
+    
         </>
     )
 };

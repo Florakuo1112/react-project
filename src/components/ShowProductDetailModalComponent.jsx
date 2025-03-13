@@ -18,7 +18,9 @@ function ShowProductDetailModalComponent(
                 <button type="button" className="btn-close" aria-label="Close" onClick={()=>closeMySingleProductModal()}></button>
             </div>
             <div className="modal-body">
-                <img src={tempProduct.imageUrl} alt={tempProduct.title} style={{ height: '300px', backgroundSize: 'cover', backgroundPosition: 'center' }} className="my-3"/>
+                <div className="d-flex justify-content-center">
+                <img src={tempProduct.imageUrl} alt={tempProduct.title} style={{ height: '300px', maxWidth:'100%',backgroundSize: 'cover', backgroundPosition: 'center' }} className="my-3"/>
+                </div>
                 <p>類型：{tempProduct.category}</p>
                 <p>內容：{tempProduct.content}</p>
                 <p>說明：{tempProduct.description}</p>

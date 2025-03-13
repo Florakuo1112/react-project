@@ -1,4 +1,69 @@
-$primary-bg:ivory;
-body{
-    background-color: $primary-bg;
+@import "bootstrap/scss/functions"; //1
+@import "./_variables"; //2
+@import "bootstrap/scss/bootstrap"; //3
+
+
+
+@import url('https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Nabla&family=Sigmar&display=swap');
+
+$primary:#f0e6c0;
+$secondary:#997354;
+$thirdary: #86b324;
+
+
+body {
+    background-color: ivory;
+  }
+
+footer {
+    background-color:$secondary;
+  }
+
+header{
+    background-color:$secondary;
 }
+
+.navLink  {
+    color: $primary;
+    text-decoration: none;
+}
+
+.link  {
+  text-decoration: none;
+}
+
+.playwrite-it-moderna{
+    font-family: "Playwrite IT Moderna", serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+  }
+  
+li{
+  list-style:none;
+}
+
+a{
+  text-decoration: none;
+}
+// fullCalendar
+/* 整個日曆的背景色 */
+.fc-theme-standard .fc-scrollgrid {
+  background-color: #00000000;
+}
+/* 一般日期的字體顏色 */
+.fc-daygrid-day-number {
+  color: $secondary;
+}
+
+.fc-button{
+  background: #00000000 !important;
+  border-color: #fa863e !important;
+  color:#fa863e !important;
+  &:hover {
+  background-color: #fa863e !important;
+  border-color: #fa863e !important;
+  color: #fff !important;
+}
+}
+

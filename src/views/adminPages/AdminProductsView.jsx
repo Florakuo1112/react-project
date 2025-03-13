@@ -45,7 +45,7 @@ function AdminProductsView(){
     //其他
     const dispatch = useDispatch();
     //useEffect
-    useEffect(()=>{
+    useEffect(() => {
       const token = document.cookie.replace(
           /(?:(?:^|.*;\s*)loginToken\s*\=\s*([^;]*).*$)|^.*$/,
           "$1",
@@ -54,10 +54,15 @@ function AdminProductsView(){
       getAllProducts();
     },[]);
     //建立modal實例
-    useEffect(()=>{
+    useEffect(() => {
         myProductModalRef.current = new Modal(productModalRef.current,{backdrop:false});
         myDelProductModalRef.current = new Modal(delProductModalRef.current,{backdrop:false});
     },[]);
+    useEffect(()=>{
+      if(!loading){
+          document.body.style.overflow = 'auto' ;
+      }
+  },[loading]);
 
   //funciton
   //取得所有產品資料

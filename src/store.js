@@ -1,10 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
-import loginStatusSlice from "./slice/loginStatusSlice";
-import adminProductStatusMessageSlice from "./slice/adminProductStatusMessageSlice";
+import loginStatusReducer from "./slice/loginStatusSlice";
+import adminProductStatusMessageReducer from "./slice/adminProductStatusMessageSlice";
+import loadingStatusReducer from "./slice/loadingStatusSlice";
+import cartStatusReducer from "./slice/cartStatusSlice";
 
 export default configureStore({
     reducer:{
-        loginStatus:loginStatusSlice,
-        adminProductStatus:adminProductStatusMessageSlice
+        loginStatus:loginStatusReducer ,
+        adminProductStatus:adminProductStatusMessageReducer,
+        loadingStatus : loadingStatusReducer,
+        cartStatus : cartStatusReducer
     }
 });

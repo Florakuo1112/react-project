@@ -43,7 +43,7 @@ export const fetchLoginStatus = createAsyncThunk(
     }
 );
 
-export const loginAction = createAsyncThunk(
+export const loginAction =  createAsyncThunk(
     'loginStatusSlice/loginAction',
     async(action, {dispatch}) => {
         try {

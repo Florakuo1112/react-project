@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client'
-import 'bootstrap/dist/css/bootstrap.min.css'; 
+//import 'bootstrap/dist/css/bootstrap.min.css'; 重scss裡面引入
 //import App from './App.jsx'; 因為用router所有App用不到
 import './assets/all.scss';
 
@@ -16,5 +16,4 @@ createRoot(document.getElementById('root')).render(
     <RouterProvider router = {router}>
     </RouterProvider>
     </Provider>
-
 )
