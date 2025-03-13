@@ -21,7 +21,7 @@ function HeaderComponent({headerRef}){
             <div className="container  d-flex justify-content-between align-items-center">
                 {/* logo */}
                 <Link className="d-flex link">
-                    <img src="../../public/coconutTree.jpg" alt="Logo" style={{height:'30px'}} className="rounded-circle"></img>
+                    <img src="public/coconutTree.jpg" alt="Logo" style={{height:'30px'}} className="rounded-circle"></img>
                     <h3 className='playwrite-it-moderna text-light  mb-0 ms-1' >Caliwoof Pet</h3> 
                 </Link>
 
