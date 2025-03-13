@@ -42,11 +42,12 @@ function HomeView(){
                         </Link>
                     </div>
                     
-                    <img src='/catWithCase.png' style={{'maxWidth':'50%'}} className="img-fluid  d-block ps-5" alt="indexPhoto" />
+                    <img src={`${import.meta.env.BASE_URL}catWithCase.png`}
+                    style={{'maxWidth':'50%'}} className="img-fluid  d-block ps-5" alt="indexPhoto" />
                 </div>
 
                 <div  className=" p-5 d-md-none">
-                    <img src='/catWithCase.png' style={{'maxWidth':'100%'}} className="img-fluid  d-block " alt="indexPhoto" />
+                    <img src={`${import.meta.env.BASE_URL}catWithCase.png`} style={{'maxWidth':'100%'}} className="img-fluid  d-block " alt="indexPhoto" />
                     <div className=' d-flex justify-content-center'>
                     <div>
                         <div className='d-flex align-items-center'>
@@ -84,16 +85,20 @@ function HomeView(){
                     modules={[Autoplay, Pagination]}
                     className="mySwiper">
                         <SwiperSlide>
-                            <OurTeamComponent link="/boss.png" title="店長 Angela" introduction="我是店長Angela，今年28歲。有四狗一貓，夢想是經營一間寵物旅館並將對動物的爱心注入到每一天的工作"></OurTeamComponent>
+                            <OurTeamComponent link={`${import.meta.env.BASE_URL}boss.png`}
+                            title="店長 Angela" introduction="我是店長Angela，今年28歲。有四狗一貓，夢想是經營一間寵物旅館並將對動物的爱心注入到每一天的工作"></OurTeamComponent>
                         </SwiperSlide>
                         <SwiperSlide>
-                            <OurTeamComponent link="/美容師.png" title="美容師 佩佩" introduction="擁有國家認證的寵物美容丙級證照，喜歡和毛孩相處幫他們打扮的漂漂亮亮"></OurTeamComponent>
+                            <OurTeamComponent  link={`${import.meta.env.BASE_URL}美容師.png`}
+                             title="美容師 佩佩" introduction="擁有國家認證的寵物美容丙級證照，喜歡和毛孩相處幫他們打扮的漂漂亮亮"></OurTeamComponent>
                         </SwiperSlide>
                         <SwiperSlide>
-                            <OurTeamComponent link="/保母.png" title="保母 Emma" introduction="我是毛孩的幼稚園老師，不僅對毛孩有耐心及愛心，更提供毛孩基礎社會化訓練"></OurTeamComponent>
+                            <OurTeamComponent  link={`${import.meta.env.BASE_URL}保母.png`}
+                             title="保母 Emma" introduction="我是毛孩的幼稚園老師，不僅對毛孩有耐心及愛心，更提供毛孩基礎社會化訓練"></OurTeamComponent>
                         </SwiperSlide>
                         <SwiperSlide>
-                            <OurTeamComponent link="/助理.png" title="助理 Nina" introduction="我付責接待爸爸媽媽與安排毛孩的房間與接送，雖然是小助理但是肩負大任。"></OurTeamComponent>
+                            <OurTeamComponent link={`${import.meta.env.BASE_URL}助理.png`}
+                            title="助理 Nina" introduction="我付責接待爸爸媽媽與安排毛孩的房間與接送，雖然是小助理但是肩負大任。"></OurTeamComponent>
                         </SwiperSlide>
                 </Swiper>
             </div>
@@ -117,16 +122,16 @@ function HomeView(){
                     modules={[Autoplay, Pagination]}
                     className="mySwiper">
                         <SwiperSlide>
-                            <OurTeamComponent link="/boss.png" title="店長 Angela" introduction="我是店長Angela，今年28歲。有四狗一貓，夢想是經營一間寵物旅館並將對動物的爱心注入到每一天的工作"></OurTeamComponent>
+                            <OurTeamComponent link={`${import.meta.env.BASE_URL}boss.png`} title="店長 Angela" introduction="我是店長Angela，今年28歲。有四狗一貓，夢想是經營一間寵物旅館並將對動物的爱心注入到每一天的工作"></OurTeamComponent>
                         </SwiperSlide>
                         <SwiperSlide>
-                            <OurTeamComponent link="/美容師.png" title="美容師 佩佩" introduction="擁有國家認證的寵物美容丙級證照，喜歡和毛孩相處幫他們打扮的漂漂亮亮"></OurTeamComponent>
+                            <OurTeamComponent link={`${import.meta.env.BASE_URL}美容師.png`} title="美容師 佩佩" introduction="擁有國家認證的寵物美容丙級證照，喜歡和毛孩相處幫他們打扮的漂漂亮亮"></OurTeamComponent>
                         </SwiperSlide>
                         <SwiperSlide>
-                            <OurTeamComponent link="/保母.png" title="保母 Emma" introduction="我是毛孩的幼稚園老師，不僅對毛孩有耐心及愛心，更提供毛孩基礎社會化訓練"></OurTeamComponent>
+                            <OurTeamComponent link={`${import.meta.env.BASE_URL}保母.png`} title="保母 Emma" introduction="我是毛孩的幼稚園老師，不僅對毛孩有耐心及愛心，更提供毛孩基礎社會化訓練"></OurTeamComponent>
                         </SwiperSlide>
                         <SwiperSlide>
-                            <OurTeamComponent link="/助理.png" title="助理 Nina" introduction="我付責接待爸爸媽媽與安排毛孩的房間與接送，雖然是小助理但是肩負大任。"></OurTeamComponent>
+                            <OurTeamComponent link={`${import.meta.env.BASE_URL}助理.png`} title="助理 Nina" introduction="我付責接待爸爸媽媽與安排毛孩的房間與接送，雖然是小助理但是肩負大任。"></OurTeamComponent>
                         </SwiperSlide>
                 </Swiper>
             </div>
@@ -137,7 +142,8 @@ function HomeView(){
                 <h2>家裏窩行事曆</h2>
                 <div className="row">
                     <div className="col-12 col-md-4 d-flex align-items-center">
-                        <img src='/calendarPhoto.png' alt="calendarPhoto" style={{'maxWidth':'90%'}}/>
+                        <img src={`${import.meta.env.BASE_URL}calendarPhoto.png`}
+                         alt="calendarPhoto" style={{'maxWidth':'90%'}}/>
                     </div>
                     <div className=" col-12 col-md-8">
                     <FullCalendar
@@ -160,7 +166,8 @@ function HomeView(){
                         <iframe className='rounded-4' src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3610.81915298344!2d121.43906070000001!3d25.1755836!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a50a4a1cc5bd%3A0x831977c0b5b72392!2z5a626KOP56qp5a-154mp5peF6aSoIENhbGl3b29mIFBldCBIb3RlbCAo6aCQ57SE5Yi2KQ!5e0!3m2!1szh-TW!2stw!4v1740324358780!5m2!1szh-TW!2stw" width="100%" height="450" allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
                     </div>
                     <div className="col-md-4 d-flex align-items-center">
-                        <img src='/location.png' alt="location" style={{'maxWidth':'100%'}}/>
+                        <img src={`${import.meta.env.BASE_URL}location.png`}
+                        alt="location" style={{'maxWidth':'100%'}}/>
                     </div>
                 </div>
             </div>
