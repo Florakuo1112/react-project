@@ -107,9 +107,9 @@ function CartView(){
         defaultValues:formDefaultValues
     });
     const onSubmit = (data)=>{
-        let newCreateDate = [...data.createDate][0];
-        newCreateDate = `${newCreateDate.getFullYear()}-${(newCreateDate.getMonth()+1)}-${newCreateDate.getDate()}`;
-        data.createDate = newCreateDate;
+        // let newCreateDate = [...data.createDate][0];
+        // newCreateDate = `${newCreateDate.getFullYear()}-${(newCreateDate.getMonth()+1)}-${newCreateDate.getDate()}`;
+        // data.createDate = newCreateDate;
 
         let newComingDate = [...data.comingDate].map((item) => {
             return(`${item.getFullYear()}-${(item.getMonth()+1)}-${item.getDate()}`)
@@ -232,7 +232,8 @@ async function submitOrder(userInfo){
         const res = await axios.post(`${API_BASE}/api/${API_PATH}/order`,{data});
         console.log(res.data.message);
         alert(res.data?.message);
-        console.log('submitOrder await finish')               
+        console.log('submitOrder await finish')
+        navigate('/')              
     } catch (error) {
         console.log('submitOrder error', error.response?.data);
         alert(`失敗:${error.response?.data.message}`);          
@@ -275,7 +276,7 @@ async function submitOrder(userInfo){
                                         <th>{item.product.price}</th>
                                         <th>{item.product.unit}</th>
                                         <th>
-                                            <input type='number' value={item.qty}  className="form-control w-50" min="1"  disabled={loading} onChange={(e)=>{reviseCartItemQty(item.id,item.product_id, Number(e.target.value))}}/>
+                                            <input type='number' value={item.qty}  className="form-control w-100" min="1"  disabled={loading} onChange={(e)=>{reviseCartItemQty(item.id,item.product_id, Number(e.target.value))}}/>
                                         </th>
                                     </tr>
                                 )

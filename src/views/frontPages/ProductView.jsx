@@ -25,6 +25,12 @@ function ProductView(){
         getProductInfo()
     },[])
 
+    useEffect(()=>{
+        if(!loading){
+            document.body.style.overflow = 'auto' ;
+        }
+    },[loading]);
+
     async function getProductInfo(){
         setLoading(true);
         try {
@@ -44,7 +50,7 @@ function ProductView(){
                     "product_id" : id,
                     "qty": qty
                 };
-            const res = await axios.post(`${API_BASE}/api/${API_PATH}/cartt`, {data});
+            const res = await axios.post(`${API_BASE}/api/${API_PATH}/cart`, {data});
             const text = `${res.data?.data?.product?.category}:
             ${res.data?.data?.product?.title}${res.data?.message}`;
             const success = res.data?.success;
@@ -67,32 +73,32 @@ function ProductView(){
             loading &&<LoadingComponent type={'spin'} color={"#FF8C00"}/>
         }
         <div className="container">
-            <div className='d-flex align-items-center py-3'>
+            <div className='d-flex flex-column align-items-md-center flex-md-row py-3'>
                     <h2 className='playwrite-it-moderna me-1'>Caliwoof Pet Hotel</h2><h5>家裏窩寵物旅館訂單系統</h5>
             </div>
             <nav aria-label="breadcrumb">
                 <ol className="breadcrumb">
                     <Link to={{pathname:'/ProductList'}} className="breadcrumb-item active" aria-current="page" style={{textDecoration: 'none'}}>訂單系統</ Link>
-                    <li className="breadcrumb-item active" aria-current="page">{product.title}</li>
+                    <li className="breadcrumb-item active" aria-current="page">{product.category} {product.title}</li>
                 </ol>
             </nav>
       
         <div className="row justify-content-center">
-            <div className="col-6">
+            <div className="col-12 col-md-6">
                 <div className="card bg-transparent border-0" >
-                    <img src={product.imageUrl} className="card-img-top w-50" alt="..." />
+                    <img src={product.imageUrl} className="card-img-top w-50 m-auto" alt="..." />
                     <div className="card-body">
                         <p>類型：{product.category}</p>
                         <p>內容：{product.content}</p>
                         <p>說明：{product.description}</p>
                         <p>售格：{product.price}</p>
                         <form className='d-flex align-items-center'>
-                            <input type='number' value={addedProduct.qty} id="qty" className="form-control w-50" min="1" 
+                            <input type='number' value={addedProduct.qty} id="qty" className="form-control w-100" min="1" 
                             disabled={loading} 
                             onChange={(e)=>{setAddedProduct({product_id:product.id, qty:Number(e.target.value)})}}/>
                             <label htmlFor="qty" className='text-center'>{`${product.unit}`}</label>
                         </form>
-                        <button type="button" className="btn btn-secondary mt-3 w-50" disabled={loading} 
+                        <button type="button" className="btn btn-secondary mt-3 w-100" disabled={loading} 
                         onClick={()=>{addToCart(product.id, addedProduct.qty)}}>
                             加入購物車
                         </button>

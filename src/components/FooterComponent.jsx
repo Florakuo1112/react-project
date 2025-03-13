@@ -1,11 +1,11 @@
-// eslint-disable-next-line react/prop-types
+import {NavLink, Link} from 'react-router';
 function FooterComponent({footerRef}){
     return(<>
             <footer className=' pb-md-3 ' ref={footerRef}>
             <div className="container py-5">
                 <div className="row justify-md-content-between justify-content-center">
                     <div className="col-md-4 col-12 d-flex justify-content-center justify-content-md-start">
-                        <div className='d-flex align-items-center pb-2'>
+                        <Link className='d-flex align-items-center pb-2'>
                             <img src={`${import.meta.env.BASE_URL}coconutTree.jpg`}
                             alt="Logo" style={{height:'50px'}} className="rounded-circle"></img>
                             <div className='ms-2'>
@@ -13,7 +13,7 @@ function FooterComponent({footerRef}){
                             <p className='text-light mb-0' >家裏窩寵物旅館</p>
 
                             </div>
-                        </div>
+                        </Link>
                     </div>
                     <div className="col-md-4 col-6  pt-2">
                         <p className='text-light mb-0' >地址: 251新北市淡水區新民街31號</p>

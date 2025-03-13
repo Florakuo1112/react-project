@@ -48,7 +48,7 @@ function HeaderComponent({headerRef}){
                 </div>
                                                                           
             </div>
-            <div className={`container ${showHamberger ? 'd-flex':'d-none'} flex-column align-items-center `}>
+            <div className={`container ${showHamberger ? 'd-flex':'d-none'}  d-md-none flex-column align-items-center `}>
             <NavLinkComponent></NavLinkComponent>
             </div>
         </header>
