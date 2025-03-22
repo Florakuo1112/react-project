@@ -92,10 +92,10 @@ ref={productModalRef}>
                     />
                   )}
                   <br />
-                  <button type="button" className="btn btn-warning" onClick={()=>{handleRemoveImgs(index)}} >移除圖片</button>
+                  <button type="button" className="btn btn-outline-danger" onClick={()=>{handleRemoveImgs(index)}} >移除圖片</button>
                 </div>
               ))}
-              <button type="button" className={`btn btn-success d-flex d-${tempProduct.imagesUrl?.length == 5 && 'none'}`}
+              <button type="button" className={`btn btn-outline-success d-flex d-${tempProduct.imagesUrl?.length == 5 && 'none'}`}
               onClick={()=>handleAddImgs()} >新增圖片</button>
             </div>
             
@@ -241,10 +241,10 @@ ref={productModalRef}>
       </div>
 
       <div className="modal-footer border-top bg-light">
-        <button type="button" className="btn btn-secondary" onClick={()=>closeProductModal()}>
+        <button type="button" className="btn btn-outline-danger" onClick={()=>closeProductModal()}>
           取消
         </button>
-        <button type="button" className="btn btn-primary" 
+        <button type="button" className="btn btn-outline-secondary" 
         onClick={()=>productModalStatus.current == 'create'? createProduct(): editProduct(tempProduct.id)}>
           確認
         </button>

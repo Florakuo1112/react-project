@@ -34,6 +34,7 @@ function AdminProductsView(){
     const [pages, setPages] = useState({}); //放pagination info
     const [tempProduct, setTempProduct] = useState(defaultTempProduct); //productModal初始值
     const [loading, setLoading] = useState(false);
+    const [category, setCategory] = useState('住宿');
     //useRef area
     const productModalRef = useRef(null);
     const myProductModalRef = useRef(null);
@@ -66,16 +67,17 @@ function AdminProductsView(){
 
   //funciton
   //取得所有產品資料
-    async function getAllProducts(page=1){
+    async function getAllProducts(page=1, category="住宿"){
       setLoading(true);
         try {
-            const res = await axios.get(`${API_BASE}/api/${API_PATH}/admin/products?page=${page}`);
+            const res = await axios.get(`${API_BASE}/api/${API_PATH}/admin/products?page=${page}&category=${category}`);
             console.log('產品資料', res);
             setProducts(res.data.products);
             setPages(res.data.pagination);
         } catch (error) {
             console.log('產品資料取得錯誤',error);
         }finally{
+          setCategory(category);
           setLoading(false);
         }
         };
@@ -86,18 +88,20 @@ function AdminProductsView(){
         try {
         const data = tempProduct;
         const res = await axios.post(`${API_BASE}/api/${API_PATH}/admin/product`,{data});
+        //console.log(res)
         dispatch(pushMessage({
           text:res.data?.message,
           success:res.data.success
         }))
-        await getAllProducts();
         closeProductModal();
         } catch (error) {
+        //  console.log(error)
         dispatch(pushMessage({
           text:error.response?.data.message.join("、"),
           success:error.response?.data.success,
         }))
         }finally{
+          await getAllProducts(pages.current, category);
           setLoading(false);
         }
     };
@@ -120,6 +124,7 @@ function AdminProductsView(){
             success:error.response?.data.success,
           }));
         }finally{
+          await getAllProducts(pages.current, category);
           setLoading(false);
         }
     };
@@ -141,6 +146,7 @@ function AdminProductsView(){
             success:error.response?.data.success,
           }));
         }finally{
+          await getAllProducts(pages.current, category);
           setLoading(false);
         }
     }
@@ -276,15 +282,23 @@ function AdminProductsView(){
     return(
         <>
         {loading &&<LoadingComponent type={'spin'} color={"#FF8C00"}/>}
-        <div className="row mt-5">
-            <div className="col-md-12">
+        
+        <div className="row ">
+            <div className="col-md-12 ">
+              <h4>產品列表管理</h4>
               <div className="d-flex justify-content-between">
-              <h2>產品列表</h2>
-              <button type="button" className="btn btn-primary" onClick={()=>openProductModal('create')}>建立新的產品</button>
+              <ul className='d-flex p-0 '>
+                <li ><button className={`border-0 rounded-3 p-2 me-2 ${category=='住宿'&& 'bg-primary'} categoryBtn`} onClick={()=>getAllProducts(1,'住宿') } >貓狗住宿</button></li>
+                <li ><button className={`border-0 rounded-3 p-2 me-2 ${category=='安親'&& 'bg-primary'} categoryBtn`}  onClick={()=>getAllProducts(1,'安親')}>狗狗安親</button></li>
+                <li ><button className={`border-0 rounded-3 p-2 me-2 ${category=='額外服務'&& 'bg-primary'} categoryBtn`}  onClick={()=>getAllProducts(1,'額外服務')}>額外服務</button></li>
+                <li ><button className={`border-0 rounded-3 p-2 me-2 ${category=='沐浴'&& 'bg-primary'} categoryBtn`}  onClick={()=>getAllProducts(1,'沐浴')}>狗狗沐浴</button></li>
+              </ul>
+              <button type="button" className="btn btn-primary mb-4" onClick={()=>openProductModal('create')}>建立新的產品</button>
               </div>
               <table className="table">
                 <thead>
                   <tr>
+                    <th>服務類型</th>
                     <th>產品名稱</th>
                     <th>原價</th>
                     <th>售價</th>
@@ -296,13 +310,14 @@ function AdminProductsView(){
                   {products && products.length > 0 ? (
                     products.map((item) => (
                       <tr key={item.id}>
+                        <td>{item.category}</td>
                         <td>{item.title}</td>
                         <td>{item.origin_price}</td>
                         <td>{item.price}</td>
                         <td>{item.is_enabled ? <span className="text-success">啟用</span> : <span>未啟用</span>}</td>
                         <td>
                         <div className="btn-group">
-                          <button type="button" className="btn btn-outline-primary btn-sm"
+                          <button type="button" className="btn btn-outline-secondary btn-sm"
                           onClick={()=>openProductModal('edit',item)}>編輯</button>
                           <button type="button" className="btn btn-outline-danger btn-sm" 
                           onClick={()=>openDeletProductModal(item)}>刪除</button>
@@ -318,10 +333,12 @@ function AdminProductsView(){
                 </tbody>
               </table>
               <div className='d-flex justify-content-center'>
-              <PaginationComponent pages={pages} setPages={setPages} getAllProducts={getAllProducts}/>
+                {pages.total_pages >1 && <PaginationComponent pages={pages} getAllProducts={getAllProducts}/>}
+
               </div>
             </div>
           </div>
+        
 
           {/* {new, edit} */}
         <ProductModalComponent

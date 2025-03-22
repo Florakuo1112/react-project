@@ -69,11 +69,11 @@ function LoginView(){
     };
 
     return(<>
-    <div className='container'>
+    <div className='container '>
     {
       loading &&<LoadingComponent type={'spin'} color={"#FF8C00"}/>
     }
-        <div className="login ">
+        <div className="login mb-5">
           <div className="row justify-content-center">
             <div className="col-md-8 col-12">
             <h1 className="h3 mb-3 font-weight-normal pt-5">請先登入</h1>
@@ -105,7 +105,7 @@ function LoginView(){
                   <label htmlFor="password">Password</label>
                 </div>
                 <button
-                  className="btn btn-lg w-100 mt-3" style={{backgroundColor:'#997354', color:'ivory'}}
+                  className="btn btn-lg w-100 mt-3 loginBtn" 
                   type="submit">
                   登入
                 </button>

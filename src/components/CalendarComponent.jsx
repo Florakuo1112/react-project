@@ -12,7 +12,7 @@ export default function Calendar({events}) {
         center: '',
         end: 'today prev,next' // will normally be on the right. if RTL, will be on the left
       }}
-      height={"70vh"}
+      height={"80vh"}
       events={events}
       eventColor={'#fa863e'}
     />

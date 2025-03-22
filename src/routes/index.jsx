@@ -1,5 +1,7 @@
 import AdminPagesLayout from "../views/adminPages/AdminPagesLayout";
 import AdminProductsView from '../views/adminPages/AdminProductsView'
+import AdminComingCalendarView from "../views/adminPages/AdminComingCalendarView";
+import AdminOrderView from "../views/adminPages/AdminOrderView";
 
 import FrontPagesLayout from "../views/frontPages/FrontPagesLayout";
 import HomeView from "../views/frontPages/HomeView";
@@ -18,6 +20,14 @@ const routes = [
             {
                 path : 'products',
                 element : <AdminProductsView/>
+            },
+            {
+                path : 'adminCalendar',
+                element : <AdminComingCalendarView />
+            },
+            {
+                path : 'order',
+                element : <AdminOrderView/>
             }
         ]
     },

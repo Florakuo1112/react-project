@@ -9,7 +9,7 @@ function NavLinkComponent(){
     return(<>
             <NavLink to='./login' className='navLink ms-2' >店長專區</NavLink> 
             <NavLink to='./' className='navLink ms-2' >內部首頁</NavLink> 
-            <NavLink to='./productlist' className='navLink ms-2'  >訂單系統</NavLink> 
+            <NavLink to='./productlist' className='navLink ms-2' onClick={()=>window.sessionStorage.setItem('category','住宿')} >訂單系統</NavLink> 
     </>)
 }
 function HeaderComponent({headerRef}){
@@ -48,7 +48,7 @@ function HeaderComponent({headerRef}){
                 </div>
                                                                           
             </div>
-            <div className={`container ${showHamberger ? 'd-flex':'d-none'}  d-md-none flex-column align-items-center `}>
+            <div className={`container ${showHamberger ? 'd-flex':'d-none'}  d-md-none flex-column align-items-center`}>
             <NavLinkComponent></NavLinkComponent>
             </div>
         </header>

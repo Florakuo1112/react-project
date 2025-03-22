@@ -22,7 +22,7 @@ function ProductView(){
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        getProductInfo()
+        getProductInfo();
     },[])
 
     useEffect(()=>{
@@ -78,8 +78,8 @@ function ProductView(){
             </div>
             <nav aria-label="breadcrumb">
                 <ol className="breadcrumb">
-                    <Link to={{pathname:'/ProductList'}} className="breadcrumb-item active" aria-current="page" style={{textDecoration: 'none'}}>訂單系統</ Link>
-                    <li className="breadcrumb-item active" aria-current="page">{product.category} {product.title}</li>
+                    <Link to={{pathname:'/ProductList'}} className="breadcrumb-item active" aria-current="page" style={{textDecoration: 'none'}}>{product.category} </ Link>
+                    <li className="breadcrumb-item active" aria-current="page">{product.title}</li>
                 </ol>
             </nav>
       

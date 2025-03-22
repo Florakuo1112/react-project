@@ -26,7 +26,7 @@ function ProductsListView(){
     const mySingleProductRef = useRef(null);
 
     useEffect(()=>{
-            getAllProducts();
+        getAllProducts();
     }, []);
 
     useEffect(()=>{
@@ -39,17 +39,19 @@ function ProductsListView(){
         }
     },[loading]);
 
-    async function getAllProducts(page=1, category='住宿'){
+    async function getAllProducts(page=1){
         setLoading(true);
+        const sessionCategory = sessionStorage.getItem('category');
         try {
-            const res = await axios.get(`${API_BASE}/api/${API_PATH}/products?page=${page}&category=${category}`);
+            const res = await axios.get(`${API_BASE}/api/${API_PATH}/products?page=${page}&category=${sessionCategory}`);
+            console.log(`${API_BASE}/api/${API_PATH}/products?page=${page}&category=${sessionCategory}`);
             console.log('getAllProducts',res);
             setPages(res.data?.pagination);
             setProducts(res.data?.products);
-            setCategory(category)
+            setCategory(sessionCategory);
         } catch (error) {
             console.log('getAllProducts error',error);
-            alert(`取得所有產品錯誤:${error.response.data.message}`)
+            alert(`取得所有產品錯誤:${error.response?.data?.message}`)
         }finally{
             dispatch(fetchCartItems());
             setLoading(false);
@@ -93,6 +95,10 @@ function ProductsListView(){
         mySingleProductRef.current.hide();
     };
 
+    function setCategoryInSessionStorage(category){
+        window.sessionStorage.setItem('category', category);
+    };
+
     useSelector((state) => {console.log(state.adminProductStatus)});
     const dispatch = useDispatch();
 
@@ -102,13 +108,18 @@ function ProductsListView(){
             loading &&<LoadingComponent type={'spin'} color={"#FF8C00"}/>
         }
         <div className='container'>
-            <div className='d-flex align-items-center py-3'>
+            <div className='d-flex align-items-md-center flex-column flex-md-row py-3'>
                 <h2 className='playwrite-it-moderna me-1'>Caliwoof Pet Hotel</h2><h5>家裏窩寵物旅館訂單系統</h5>
             </div>
             <ul className='d-flex p-0 '>
-            <li ><button className={`border-0 rounded-3 p-2 me-2 ${category=='住宿'&& 'bg-primary'}`} onClick={()=>getAllProducts(1,'住宿')} >貓狗住宿</button></li>
-            <li ><button className={`border-0 rounded-3 p-2 me-2 ${category=='安親'&& 'bg-primary'}`}  onClick={()=>getAllProducts(1,'安親')}>狗狗安親</button></li>
-            <li ><button className={`border-0 rounded-3 p-2 me-2 ${category=='額外服務'&& 'bg-primary'}`}  onClick={()=>getAllProducts(1,'額外服務')}>額外服務</button></li>
+            <li ><button className={`border-0 rounded-3 p-2 me-2 ${category=='住宿'&& 'bg-primary'} categoryBtn`} 
+            onClick={()=> {setCategoryInSessionStorage('住宿');getAllProducts(1);}}>貓狗住宿</button></li>
+            <li ><button className={`border-0 rounded-3 p-2 me-2 ${category=='安親'&& 'bg-primary'} categoryBtn`}  
+            onClick={()=> {setCategoryInSessionStorage('安親');getAllProducts(1);}}>狗狗安親</button></li>
+            <li ><button className={`border-0 rounded-3 p-2 me-2 ${category=='額外服務'&& 'bg-primary'} categoryBtn`} 
+            onClick={()=> {setCategoryInSessionStorage('額外服務');getAllProducts(1);}}>額外服務</button></li>
+            <li ><button className={`border-0 rounded-3 p-2 me-2 ${category=='沐浴'&& 'bg-primary'} categoryBtn`}  
+            onClick={()=> {setCategoryInSessionStorage('沐浴');getAllProducts(1);}}>狗狗沐浴</button></li>
             </ul>
             {<div className="row d-flex justify-content-between pb-4">
                 
@@ -117,7 +128,7 @@ function ProductsListView(){
                             return(<>
                             <div className="col-12 col-md-4" key={item.id}>
                             <div className="card bg-transparent border-0 pt-5"  style={{height:400}}>
-                                <Link to={{pathname:item.id}} style={{height:'60%',maxWidth:'80%'}}>
+                                <Link to={{pathname:item.id}} style={{height:'60%',maxWidth:'80%'}} onClick={()=>{setCategoryInSessionStorage(item.category)}}>
                                     <img src={item.imageUrl} className="card-img-top" alt="..." 
                                 style={{height:'100%',maxWidth:'100%', objectFit:'contain'}}/>
                                 </Link>

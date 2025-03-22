@@ -13,7 +13,9 @@ $thirdary: #86b324;
 
 body {
     background-color: ivory;
+    overflow: auto !important;
   }
+
 
 footer {
     background-color:$secondary;
@@ -26,6 +28,9 @@ header{
 .navLink  {
     color: $primary;
     text-decoration: none;
+    &:hover{
+      font-weight: 500;
+    }
 }
 
 .link  {
@@ -65,5 +70,21 @@ a{
   border-color: #fa863e !important;
   color: #fff !important;
 }
+}
+
+.categoryBtn{
+  &:hover{
+    background: $primary;
+  }
+}
+
+.loginBtn{
+  background: $secondary;
+  color:$primary;
+  &:hover{
+    background: $primary;
+    color:$secondary;
+    border: 2px solid $secondary;
+  }
 }
 

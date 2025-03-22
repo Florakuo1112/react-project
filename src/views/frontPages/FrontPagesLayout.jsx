@@ -11,25 +11,26 @@ function FrontPagesLayout(){
     const outletRef = useRef(null);
     const footerRef = useRef(null);
     //其他
-    const location = useLocation();
+    //const location = useLocation();
  
-    useEffect(() => {
-        if(location.pathname == '/login'){
-            console.log('fixed')
-            footerRef.current.style.position = 'fixed';  // 設置為固定定位
-            footerRef.current.style.bottom = '0';         // 設置 bottom 為 0
-            footerRef.current.style.width = '100%'; 
-        }else{
-            console.log('relative')
-            footerRef.current.style.position = 'relative';  // 設置為相對定位       // 
-            footerRef.current.style.width = '100%';   
-        }
-      }, [location]);
+    // useEffect(() => {
+    //     if(location.pathname == '/login'){
+    //         console.log('fixed')
+    //         footerRef.current.style.position = 'fixed';  // 設置為固定定位
+    //         footerRef.current.style.bottom = '0';         // 設置 bottom 為 0
+    //         footerRef.current.style.width = '100%'; 
+    //     }else{
+    //         console.log('relative')
+    //         footerRef.current.style.position = 'relative';  // 設置為相對定位       // 
+    //         footerRef.current.style.width = '100%';   
+    //     }
+    //   }, [location]);
 
     return(
         <>
+        <div></div>
         <HeaderComponent  headerRef={headerRef}></HeaderComponent>
-        <div ref={outletRef}>
+        <div ref={outletRef} className="min-vh-100">
         <Outlet ></Outlet>
         </div>
         <FooterComponent footerRef={footerRef}></FooterComponent>

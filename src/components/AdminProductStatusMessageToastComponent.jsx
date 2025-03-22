@@ -40,7 +40,7 @@ function AdminProductStatusMessageToastComponent(){
             {messages.map((item) => {
                 return(
                     <div className="toast" role="alert" key={item.id}
-                    ref={(dom) => toastRefs.current[item.id] = DOMQuad} >
+                    ref={(dom) => toastRefs.current[item.id] = dom} >
                         <div className={`toast-header text-light 
                         ${item.success? 'bg-success' : 'bg-danger'}`}>
                             <strong className="me-auto">

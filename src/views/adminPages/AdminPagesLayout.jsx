@@ -1,15 +1,15 @@
 import {useState, useRef, useEffect} from 'react'
-import {NavLink, Outlet, useNavigate} from 'react-router';
+import { Outlet, useNavigate} from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { Toast } from 'bootstrap';
 import LoginToastComponent from '../../components/LoginToastComponent';
 import AdminProductStatusMessageToastComponent from '../../components/AdminProductStatusMessageToastComponent';
 import LoadingComponent from '../../components/LoadingComponent';
-import { fetchLoginStatus, logoutAction} from '../../slice/loginStatusSlice';
+import AdminHeaderComponent from '../../components/AdminHeaderComponent';
+import FooterComponent from '../../components/FooterComponent';
+import AdminSideBarComponent from '../../components/AdminSideBarComponent'
+import { fetchLoginStatus} from '../../slice/loginStatusSlice';
 
-// API_PATH
-const API_BASE = import.meta.env.VITE_BASE_URL;
-const API_PATH = import.meta.env.VITE_API_PATH;
 
 function AdminPagesLayout(){
     //useState
@@ -35,11 +35,6 @@ function AdminPagesLayout(){
     }, [loginStatus]);
 
     //Function
-    function logout(e){
-      e.preventDefault(); 
-      dispatch(logoutAction());
-    };
-
     function showLoginToast(){
       myLoginToastRef.current.show();
     };
@@ -49,19 +44,23 @@ function AdminPagesLayout(){
     };
     return(
         <>
-        <div className="container">
         {loading &&<LoadingComponent type={'spin'} color={"#FF8C00"}/>}
-        <nav>
-            <NavLink to='../'>Front Page</NavLink> | 
-            <a href='#' onClick={(e)=>{logout(e)}}>登出</a>
-        </nav>
-        <h2>後台管理</h2>
-        <Outlet></Outlet>
-
+        {/* <AdminHeaderComponent></AdminHeaderComponent> */}
+        <div  className='d-flex'>
+          <AdminSideBarComponent></AdminSideBarComponent>
+          <div className='container'style={{marginLeft:"300px"}}>
+            <div className='d-flex align-items-center py-3'>
+              <h2 className='playwrite-it-moderna me-1'>Caliwoof Pet Hotel</h2><h5>家裏窩寵物旅館訂單系統後台 </h5>
+            </div>
+            <Outlet></Outlet>
+          </div>
+        </div>
+        {/* <FooterComponent ></FooterComponent> */}
+        {/* 吐司 */}
         <LoginToastComponent loginToastRef={loginToastRef} loginStatus={loginStatus} 
         closeLoginToast={closeLoginToast}></LoginToastComponent>
         <AdminProductStatusMessageToastComponent></AdminProductStatusMessageToastComponent>
-        </div>
+
         </>
     )
 };

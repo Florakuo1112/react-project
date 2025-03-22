@@ -112,7 +112,19 @@ function CartView(){
         // data.createDate = newCreateDate;
 
         let newComingDate = [...data.comingDate].map((item) => {
-            return(`${item.getFullYear()}-${(item.getMonth()+1)}-${item.getDate()}`)
+            let month;
+            let date;
+            if(item.getMonth()+1< 10){
+                month = `0${item.getMonth()+1}`
+            }else{
+                month =item.getMonth()+1
+            };
+            if(item.getDate()<10){
+                date = `0${getDate()}`
+            }else{
+                date = item.getDate();
+            };  
+            return(`${item.getFullYear()}${month}${date}`)
         });
         data.comingDate = newComingDate;
         console.log(data);
